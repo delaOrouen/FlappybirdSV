@@ -1,0 +1,12 @@
+// this is the FSM for the winner's display. When player one pushes the light off the right-most edge (light 0), the hex display will show 2.
+// when player one forces the light off the edge, 
+
+module winDisplay (clk, reset, HEX0, p1in, p2in, rightMost, leftMost);
+	input logic clk, reset, 
+	input logic HEX0
+	
+	
+	
+	
+	
+endmodule

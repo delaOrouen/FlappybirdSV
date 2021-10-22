@@ -1,0 +1,83 @@
+// 10 bit comparator that compares the 
+
+
+// FSM TESTED AND PASSED
+
+module comparator (clk, reset, p1in, p2in, rightMost, leftMost, HEX0);
+	input logic clk, reset, p1in, p2in, rightMost, leftMost;
+	output logic [6:0] HEX0;
+
+	
+	// state variables
+	enum {OFF, P2WIN, P1WIN} ps, ns;
+	
+	
+		always_comb begin
+		case (ps)
+			OFF: if (p1in == 0 & p2in == 0) ns = OFF;
+				else if (p1in == 1 & rightMost == 1 & p2in == 0) ns = P1WIN;
+				else if (p2in == 1 & leftMost == 1 & p1in == 0) ns = P2WIN;
+				else ns = OFF;	
+			P1WIN: ns = P1WIN;
+
+			P2WIN: ns = P2WIN;
+		endcase
+	end
+
+
+	always_comb begin
+		case (ps)
+			OFF: 	   HEX0 = 7'b1000000;
+			P2WIN: 	HEX0 = 7'b0100100;
+			P1WIN: 	HEX0 = 7'b1111001;
+		endcase
+	end	
+
+	always_ff @(posedge clk) begin //is there a better way to link two DFFs?
+		if (reset)
+			ps <= OFF;
+		else 
+			ps <= ns;
+	end
+		
+endmodule
+
+
+
+module winDisplay_testbench();
+	logic clk, reset, p1in, p2in, rightMost, leftMost;
+	logic [6:0] HEX0;
+ 
+
+ winDisplay dut (clk, reset, HEX0, p1in, p2in, rightMost, leftMost);
+
+ // Set up the clock.
+ parameter CLOCK_PERIOD=100;
+ initial begin
+	clk <= 0;
+	forever #(CLOCK_PERIOD/2) clk <= ~clk;
+ end
+
+ // Set up the inputs to the design. Each line is a clock cycle.
+ initial begin
+																						@(posedge clk);
+	reset <= 1; 																	@(posedge clk);
+	reset <= 0;	p1in<= 0; p2in<= 0; rightMost<= 0; leftMost <= 0; 	@(posedge clk);
+																						@(posedge clk);
+																						@(posedge clk);
+	p1in <= 1; rightMost <= 1;													@(posedge clk);
+																						@(posedge clk);
+																						@(posedge clk);
+	reset<=1;																		@(posedge clk);
+	reset <= 0;	p1in<= 0; p2in<= 0; rightMost<= 0; leftMost <= 0; 	@(posedge clk);
+																						@(posedge clk);
+	p2in <= 1; leftMost <= 1;													@(posedge clk);
+																						@(posedge clk);
+																						@(posedge clk);
+																						@(posedge clk);
+																						@(posedge clk);
+	$stop; // End the simulation.
+ end
+endmodule
+
+
