@@ -1,4 +1,0 @@
-module gameField ();
-	output gameOver, gatePassed;
-	input [15:0] row;
-	input gravity, movePipeOn, newPipeOn;

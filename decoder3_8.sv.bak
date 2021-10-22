@@ -1,7 +1,0 @@
-module decoder3_8(in, en, out);
-	input logic [2:0] in;
-	input logic en;
-	output logic [7:0] out;
-	
-	always_comb begin
-		case(en)

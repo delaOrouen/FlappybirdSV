@@ -1,6 +1,0 @@
-// this FSM uses all nine lights of the DE1 board as the battlefield for the tug of war game. Light five starts as the only lit light. When 
-// player one presses their button, the light "advances light to the left, and visa versa for player two. The middle light will reset to a value 
-// of one where the light is on. The rest of the lights will reset to a value of zero (or off).
-module battlefield (clk, reset, leftLight, rightLight, moveRight, moveLeft, out); // thid FSM manages one standard light
-	input logic clk, reset, leftLight, rightLight, moveRight, moveLeft;
-	output logic out;
